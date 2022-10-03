@@ -1,0 +1,141 @@
+*,
+::before,
+::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  min-height: 100vh;
+  background: linear-gradient(to left, #212121, #f1f1f1);
+  font-family: Open sans, Helvetica, sans-serif;
+  padding: clamp(20px, 5vw, 50px) 10px;
+}
+
+.container {
+  max-width: 600px;
+  margin: 0 auto;
+  padding: 30px;
+  background: #f1f1f1;
+  color: #212121;
+  border-radius: 5px;
+  border: 1px solid #969696;
+}
+
+h2 {
+  font-size: 30px;
+  font-family: Raleway, sans-serif;
+  text-align: center;
+}
+
+.input-group {
+  margin-top: 30px;
+}
+
+label {
+  font-size: 20px;
+  display: block; /* pour les placer au dessus des inputs */
+  position: relative;
+}
+
+input {
+  display: block; /* input prend la largeur de l'élément parent */
+  width: 100%;
+  font-size: 18px;
+  color: #212121;
+  padding: 0 auto;
+  outline: none; /* pour l'élément focus */
+  border: none;
+  background: transparent;
+  border-bottom: 1px solid #212121;
+}
+
+input:focus {
+  box-shadow: 0 1px 0px #212121;
+}
+
+input::placeholder {
+  font-size: 15px;
+}
+
+.icon-input-container {
+  position: relative; /* Pour supperposer l'icone */
+}
+
+.icon-verif {
+  width: 30px;
+  position: absolute; /* permet de mettre l'icone par dessus et de le centrer */
+  top: 50%;
+  transform: translateY(-80%);
+  right: 0; /* placer l'élément sur la droite */
+  display: none;
+}
+
+.error-message {
+  margin-top: 7px;
+  color: #ff0000df;
+  font-weight: 400;
+  display: none;
+}
+
+.password-infos {
+  margin-top: 8px;
+  color: #212121;
+  font-weight: 400;
+  display: block;
+}
+
+.lines {
+  width: 80%;
+  display: flex; /* placer les éléments alignés sur les deux axes */
+  justify-content: center;
+  align-items: center;
+  display: none;
+}
+
+.l1,
+.l2,
+.l3 {
+  height: 5px;
+  margin: 15px 5px 20px;
+  position: relative; /* permet de placer les spans en dessous */
+  width: 30%;
+}
+
+.l1 {
+  background-color: rgba(255, 0, 0, 0.703);
+}
+
+.l2 {
+  background-color: rgba(255, 162, 0, 0.786);
+}
+
+.l3 {
+  background-color: rgba(0, 255, 13, 0.703);
+}
+
+.lines span {
+  position: absolute; /* aligner le texte sous les lignes */
+  left: 50%;
+  transform: translateX(-50%);
+  top: 10px;
+}
+
+form button {
+  font-size: 20px;
+  min-width: 150px;
+  display: block; /* Permet le positionnement car de base un button est inline */
+  margin: 40px auto 10px;
+  padding: 12px 15px;
+  background-color: #212121;
+  color: #f1f1f1;
+  border-radius: 5px;
+  font-family: Raleway, sans-serif;
+  font-weight: 600;
+  cursor: pointer; /* faire savoir à l'utilisateur qu'il a à faire à un button cliquable */
+}
+
+form button:hover {
+  background-color: #212121e4;
+}
