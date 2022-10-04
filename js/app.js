@@ -1,3 +1,32 @@
+const inputValidity = {
+  user: false,
+  email: false,
+  password: false,
+  passwordConfirmation: false,
+};
+const form = document.querySelector("form");
+
+form.addEventListener("submit", handleForm);
+
+function handleForm(e) {
+  e.preventDefault();
+  // retourne un tableau des différentes propriétées
+  const key = Object.keys(inputValidity);
+
+  const failedInput = key.filter(key => {
+    if (!inputValidity[key]) {
+      return key
+    }
+  })
+
+  if (failedInput.length) {
+    
+  } else {
+    alert("Vos données ont bien été envoyées.");
+  }
+
+  console.log(key, Boolean(failedInput.length));
+}
 const validationIcon = document.querySelectorAll(".icon-verif");
 const validationText = document.querySelectorAll(".error-message");
 
@@ -11,8 +40,10 @@ userInput.addEventListener("input", userValidation);
 function userValidation() {
   if (userInput.value.length >= 5) {
     showValidation({ index: 0, validation: true });
+    inputValidity.user = true;
   } else {
     showValidation({ index: 0, validation: false });
+    inputValidity.user = false;
   }
 }
 
@@ -21,10 +52,19 @@ function showValidation({ index, validation }) {
     // Si la condition est respectée
     validationIcon[index].src = "./ressources/check.svg";
     validationIcon[index].style.display = "block";
+    // dans le cas du password qui ne contient pas de message d'erreur
+    if (validationText[index]) {
+      validationText[index].style.display = "none";
+    }
   } else {
     // Sinon
     validationIcon[index].src = "./ressources/error.svg";
     validationIcon[index].style.display = "block";
+
+    // pour l'input password
+    if (validationText[index]) {
+      validationText[index].style.display = "block";
+    }
   }
 }
 
@@ -41,8 +81,10 @@ function mailValidation() {
   // si le format est respecté
   if (regexEmail.test(mailInput.value)) {
     showValidation({ index: 1, validation: true });
+    inputValidity.email = true;
   } else {
     showValidation({ index: 1, validation: false });
+    inputValidity.email = false;
   }
 }
 
@@ -68,36 +110,105 @@ const regexList = {
 };
 
 let passwordValue;
-let validationResult = 0;
 
 function passwordValidation() {
+  let validationResult = 0;
   passwordValue = passwordInput.value;
   // prropriétés dans l'objet passwordVerification
   for (const prop in passwordVerification) {
+    // longueur
     if (prop === "length") {
-      // longueur
       if (passwordValue.length < regexList.length) {
         passwordVerification.length = false;
       } else {
         passwordVerification.length = true;
         validationResult++;
       }
-    } else if (prop === "symbol") {
-      // verification regex symbol
-      if (regexList["symbol"].test(passwordValue)) {
-        passwordVerification["symbol"] = true;
-        validationResult++;
-      } else {
-        passwordVerification["symbol"] = false;
-      }
-    } else if (prop === "number") {
-      // regex number
-      if (regexList["number"].test(passwordValue)) {
-        passwordVerification["number"] = true;
-        validationResult++;
-      } else {
-        passwordVerification["number"] = false;
-      }
+      continue;
     }
+
+    // verification regex symbol et number
+    if (regexList[prop].test(passwordValue)) {
+      passwordVerification[prop] = true;
+      validationResult++;
+    } else {
+      passwordVerification[prop] = false;
+    }
+  }
+
+  // icone de validation
+  if (validationResult !== 3) {
+    showValidation({ index: 2, validation: false });
+    inputValidity.password = false;
+  } else {
+    showValidation({ index: 2, validation: true });
+    inputValidity.password = true;
+  }
+
+  passwordStrength();
+}
+
+const lines = document.querySelectorAll(".lines div");
+
+// Ajout des lignes de force de password
+function passwordStrength() {
+  const passwordLength = passwordInput.value.length;
+
+  // champ vide
+  if (!passwordLength) {
+    addLines(0);
+    // Password sécurisé
+  } else if (
+    passwordLength > 9 &&
+    passwordVerification.symbol &&
+    passwordVerification.number
+  ) {
+    addLines(3);
+    // Moyen
+  } else if (
+    (passwordLength > regexList.length && passwordVerification.symbol) ||
+    passwordVerification.number
+  ) {
+    addLines(2);
+    // Faible
+  } else {
+    addLines(1);
+  }
+}
+
+// affichage des lignes en fonction de la valeur d'entrée
+function addLines(numberOfLines) {
+  lines.forEach((el, index) => {
+    if (index < numberOfLines) {
+      el.style.display = "block";
+    } else {
+      el.style.display = "none";
+    }
+  });
+
+  confirmPassword();
+}
+
+const confirmInput = document.querySelector(".input-group:nth-child(4) input");
+
+// quand on retire le focus
+confirmInput.addEventListener("blur", confirmPassword);
+// quand on écrit dans l'input
+confirmInput.addEventListener("input", confirmPassword);
+
+function confirmPassword() {
+  const confirmValue = confirmInput.value;
+
+  // si aucune valeur
+  if (!confirmValue && !passwordValue) {
+    validationIcon[3].style.display = "none";
+    // Sinon si les deux passwords ne correspondent pas
+  } else if (passwordValue !== confirmValue) {
+    showValidation({ index: 3, validation: false });
+    inputValidity.passwordConfirmation = false;
+  } else {
+    // S'ils sont égaux
+    showValidation({ index: 3, validation: true });
+    inputValidity.passwordConfirmation = true;
   }
 }

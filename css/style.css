@@ -66,8 +66,8 @@ input::placeholder {
 .icon-verif {
   width: 30px;
   position: absolute; /* permet de mettre l'icone par dessus et de le centrer */
-  top: 50%;
-  transform: translateY(-80%);
+  top: 0;
+  transform: translateY(-50%);
   right: 0; /* placer l'élément sur la droite */
   display: none;
 }
@@ -88,10 +88,9 @@ input::placeholder {
 
 .lines {
   width: 80%;
-  display: flex; /* placer les éléments alignés sur les deux axes */
-  justify-content: center;
+  display: flex; /* placer les éléments alignés sur l'axe Y en début de bloc */
+  justify-content: flex-start;
   align-items: center;
-  display: none;
 }
 
 .l1,
@@ -101,6 +100,7 @@ input::placeholder {
   margin: 15px 5px 20px;
   position: relative; /* permet de placer les spans en dessous */
   width: 30%;
+  display: none;
 }
 
 .l1 {
